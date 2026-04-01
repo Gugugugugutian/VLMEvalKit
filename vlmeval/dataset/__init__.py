@@ -107,22 +107,6 @@ from .refspatial import RefSpatialDataset
 from .refspatialbench import RefSpatialBench
 from .robospatialbench import RoboSpatialBench
 from .sarena import SArena
-from .uni_svg import UniSVG
-from .vladbench import VLADBench
-from .design2code import Design2Code
-from .chartcap import ChartCapDataset
-from .asclepius import Asclepius
-from .mmsafetybench import MMSafetyBenchDataset
-from .mssbench import MSSBenchDataset
-from .siuo import SIUODataset
-from .siuo_gen import SIUOGenDataset
-from .siuo_mcq import SIUOMCQDataset
-from .xstest import XSTestDataset
-from .flames import FlamesDataset
-from .m3oralbench import M3oralBenchDataset
-
-from .SGI_Bench_1_0.experimental_reasoning import SGI_Bench_Experimental_Reasoning
-
 from .sfebench import SFE
 from .SGI_Bench_1_0.deep_research import SGI_Bench_Deep_Research
 from .SGI_Bench_1_0.dry_experiment import SGI_Bench_Dry_Experiment
