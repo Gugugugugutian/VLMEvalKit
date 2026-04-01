@@ -1,10 +1,9 @@
 import re
-from pathlib import Path
 
 import pandas as pd
 
-from ..smp import *
-from ..smp.file import get_intermediate_file_path
+from ..smp.file import dump, get_intermediate_file_path, load
+from ..smp.misc import d2df, toliststr
 from .image_base import ImageBaseDataset
 
 
@@ -63,7 +62,12 @@ class M3oralBenchDataset(ImageBaseDataset):
                 prompt = self._instruction_map.get(int(line_id), None)
             except Exception:
                 prompt = None
-        if not prompt and 'instruction' in line and not pd.isna(line['instruction']) and str(line['instruction']).strip():
+        if (
+            not prompt
+            and 'instruction' in line
+            and not pd.isna(line['instruction'])
+            and str(line['instruction']).strip()
+        ):
             prompt = str(line['instruction'])
         if prompt is None:
             options = {k: line[k] for k in 'ABCDEFG' if k in line and not pd.isna(line[k])}

@@ -1,8 +1,9 @@
+import os.path as osp
 import re
 import warnings
 
-from ..smp import *
-from ..smp.file import get_intermediate_file_path
+from ..smp.file import dump, get_intermediate_file_path, load
+from ..smp.misc import d2df
 from ..utils import track_progress_rich
 from .text_base import TextBaseDataset
 from .utils import DEBUG_MESSAGE, build_judge
