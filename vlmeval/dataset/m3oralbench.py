@@ -1,5 +1,4 @@
 import re
-
 import pandas as pd
 
 from ..smp.file import dump, get_intermediate_file_path, load
@@ -9,13 +8,14 @@ from .image_base import ImageBaseDataset
 
 def _extract_option(pred):
     s = str(pred or "")
-    # Align with SafeWork-R1 extraction: boxed answer first.
     boxed = re.findall(r"\\boxed\{\s*([A-Z])\s*\}", s)
-    if boxed:
+    if len(boxed):
         return boxed[-1]
-    # Fallback: use the last parenthesized option.
     m = re.findall(r"\(([A-Z])\)", s)
-    if m:
+    if len(m):
+        return m[-1]
+    m = re.findall(r"\b([A-G])\b", s.upper())
+    if len(m):
         return m[-1]
     return ""
 
@@ -29,20 +29,6 @@ class M3oralBenchDataset(ImageBaseDataset):
     @classmethod
     def supported_datasets(cls):
         return ['M3oralBench']
-
-    def __init__(self, dataset='M3oralBench', **kwargs):
-        super().__init__(dataset=dataset, **kwargs)
-        self._instruction_map = {}
-        if self.QUERY_JSON.exists():
-            try:
-                items = load(str(self.QUERY_JSON))
-                self._instruction_map = {
-                    int(item['id']): str(item.get('instruction', '')).strip()
-                    for item in items
-                    if 'id' in item and str(item.get('instruction', '')).strip()
-                }
-            except Exception:
-                self._instruction_map = {}
 
     def build_prompt(self, line):
         if isinstance(line, int):
