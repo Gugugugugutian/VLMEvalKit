@@ -126,7 +126,7 @@ class XSTestDataset(TextBaseDataset):
         else:
             # Match SafeWork-R1 judge defaults.
             judge_kwargs.setdefault('temperature', 0)
-            judge_kwargs.setdefault('max_tokens', 16)
+            judge_kwargs.setdefault('max_tokens', 1600)
             judge_kwargs.setdefault('top_p', 1)
             judge_kwargs.setdefault('frequency_penalty', 0)
             judge_kwargs.setdefault('presence_penalty', 0)

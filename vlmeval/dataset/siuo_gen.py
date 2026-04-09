@@ -155,6 +155,22 @@ class SIUOGenDataset(ImageBaseDataset):
         msgs.append(dict(type='text', value=prompt))
         return msgs
 
+    def _resolve_image_path_for_eval(self, src_line, idx):
+        if hasattr(src_line, 'to_dict'):
+            src_line = src_line.to_dict()
+        if 'image' in src_line or 'image_path' in src_line:
+            try:
+                return self.dump_image(src_line)[0]
+            except AssertionError:
+                pass
+        local_path = osp.join(self.img_root, f'{idx}.png')
+        if osp.exists(local_path):
+            return local_path
+        raise AssertionError(
+            f'Cannot resolve SIUO_GEN image for index={idx}. '
+            f'Available source fields: {sorted(src_line.keys())}'
+        )
+
     def evaluate(self, eval_file, **judge_kwargs):
         data = load(eval_file)
         assert 'prediction' in data and 'question' in data
@@ -167,9 +183,7 @@ class SIUOGenDataset(ImageBaseDataset):
                 if idx not in index2line:
                     raise KeyError(f'Missing source sample for SIUO_GEN index={idx}')
                 src_line = index2line[idx]
-                if hasattr(src_line, 'to_dict'):
-                    src_line = src_line.to_dict()
-                image_paths.append(self.dump_image(src_line)[0])
+                image_paths.append(self._resolve_image_path_for_eval(src_line, idx))
             data['image_path'] = image_paths
 
         model_name = judge_kwargs.pop('model', 'gpt-4o-2024-11-20')
